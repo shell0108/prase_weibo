@@ -13,13 +13,15 @@ def get_proxy_pool():
     # proxy为字符串
     return proxy_pool
 
-def get_random_proxy(proxy_pool):
+
+def get_random_proxy():
     i=random.randint(1,20)
     proxy=proxy_pool[i-1]
     proxy = {
     'proxy': 'http://'+proxy
     }
     return proxy
+
 
 
     
