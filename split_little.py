@@ -8,7 +8,7 @@ def split_little(n):
     fans_dict={}
     for line in open("fans_id.json",'r',encoding='utf-8'):  
         fans_dict[line[5:15]]=line[19:-4]
-        count=count+1
+        count=count+1    
         for i in range(0,n):
             if(count>(i+1)*(l/n)):
                 if(count<((i+1)*(l/n)+1)):
@@ -28,8 +28,9 @@ def split_little(n):
         fileObj2.write(jsObj)
         fileObj2.close() 
 
-
-split_little(4)
+# n为要拆分成的小文件个数
+n = 10
+split_little(n+1)
                         
 
 

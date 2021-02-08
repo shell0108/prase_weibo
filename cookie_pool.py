@@ -10,7 +10,7 @@ def get_cookie_pool():
     'Referer':'https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=https%3A%2F%2Fm.weibo.cn%2F'
         }
 
-    login_url='https://passport.weibo.cn/sso/login'
+    login_url='https://passport.weibo.cn/signin/login?entry=mweibo'
     # 账号和密码可从txt文件中读取
     f = open("xiaohao.txt","r",encoding='utf-8') 
     lines = f.readlines()      #读取全部内容 ，并以列表方式返回
@@ -33,6 +33,7 @@ def get_cookie_pool():
             'password':password
         }
         res=requests.post(login_url,headers=headers,data=post_data) #发出post请求成功登陆
+        print(res.headers)
         raw_cookie=res.headers['Set-Cookie'].split(';')
         SUB=raw_cookie[0]
         SHUB=raw_cookie[4].split(',')[1]
@@ -55,7 +56,7 @@ def get_random_cookie():
     cookie=cookie_pool[r]
     return cookie
 
-# print(get_cookie_pool())
+print(get_cookie_pool())
 
 
 

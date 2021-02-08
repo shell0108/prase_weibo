@@ -5,11 +5,11 @@ import time
 import random
 import os
 from bs4 import BeautifulSoup
-from ip_pool import get_random_proxy,get_proxy_pool
-from cookie_pool import get_cookie_pool,get_random_cookie
+# from ip_pool import get_random_proxy,get_proxy_pool
+# from cookie_pool import get_cookie_pool,get_random_cookie
 
 def clean_json():
-    fileObj=open('data1.json','w',encoding='utf-8')
+    fileObj=open('comment.json','w',encoding='utf-8')
     fileObj.seek(0)
     fileObj.truncate()   #清空文件
     fileObj.close() 
@@ -24,7 +24,7 @@ def is_json(myjson):
 def prase_weibo(mid):
     detail_url='https://m.weibo.cn/detail/'
     detail_url=detail_url+(mid)
-    headers['Cookie']=get_random_cookie(cookie_pool)
+    # headers['Cookie']=get_random_cookie(cookie_pool)
     res=requests.get(detail_url,headers=headers).text
     soup = BeautifulSoup(res, "html.parser")
     script=str(soup.find_all('script')[1])
@@ -40,13 +40,13 @@ def prase_weibo(mid):
 
 def prase_comment(url,i,payload):
     aim_url_child='https://m.weibo.cn/comments/hotFlowChild'
-    cookie=get_random_cookie(cookie_pool)
-    headers['Cookie']=cookie
-    proxy=get_random_proxy(proxy_pool)
+    # cookie=get_random_cookie(cookie_pool)
+    # headers['Cookie']=cookie
+    # proxy=get_random_proxy(proxy_pool)
 
-    res=requests.get(url,headers=headers,params=payload,proxies=proxy)
+    res=requests.get(url,headers=headers,params=payload)
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),"正在爬取第",i+1,"页评论")
-    print("using cookie:",cookie[-24:],"    using proxy:",proxy['proxy'])
+    # print("using cookie:",cookie[-24:],"    using proxy:",proxy['proxy'])
     # 处理JSON格式的数据
     # json.dumps将ptyhon的dict转成str
     # json.loads将str转成python的dict类型
@@ -98,7 +98,7 @@ def prase_comment(url,i,payload):
                     
         # 每爬完一页开始写入json文件
         jsObj=json.dumps(text_comm, ensure_ascii = False)
-        fileObj=open('data1.json','w',encoding='utf-8')
+        fileObj=open('comment.json','w',encoding='utf-8')
         fileObj.write(jsObj)
         fileObj.close() 
         # 获取max_id作为下次请求的参数
@@ -124,13 +124,13 @@ def prase_comment(url,i,payload):
         os._exit(0)
     
 def prase_comment_child(url,i,payload,cid):
-    cookie=get_random_cookie(cookie_pool)
-    headers['Cookie']=cookie
-    proxy=get_random_proxy(proxy_pool)
+    # cookie=get_random_cookie(cookie_pool)
+    # headers['Cookie']=cookie
+    # proxy=get_random_proxy(proxy_pool)
     # 如果子评论到底了,做个退出操作,应该是没有max_id了
-    res=requests.get(url,headers=headers,params=payload,proxies=proxy)
+    res=requests.get(url,headers=headers,params=payload)
     print("     ",time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),"正在爬取第",i+1,"页子评论")
-    print("     ","using cookie:",cookie[-24:],"    using proxy:",proxy['proxy'])
+    # print("     ","using cookie:",cookie[-24:],"    using proxy:",proxy['proxy'])
     
     if(is_json(res.content)):
         res=res.content
@@ -152,7 +152,7 @@ def prase_comment_child(url,i,payload,cid):
    
         # 每爬完一页开始写入json文件
         jsObj=json.dumps(text_comm, ensure_ascii = False)
-        fileObj=open('data1.json','w',encoding='utf-8')
+        fileObj=open('comment.json','w',encoding='utf-8')
         fileObj.write(jsObj)
         fileObj.close() 
 
@@ -179,18 +179,18 @@ if __name__=="__main__":
     # 每次爬取前将json文件内容清空
     clean_json()
     # 更新cookie池 代理池
-    proxy_pool=get_proxy_pool()
-    cookie_pool=get_cookie_pool()
+    # proxy_pool=get_proxy_pool()
+    # cookie_pool=get_cookie_pool()
     time_end=time.time()
-    print("refresh cookie_pool cost:",time_end-time_start)
+    # print("refresh cookie_pool cost:",time_end-time_start)
     # 可做 :通过键盘来输入mid,即weibo_detail id
     detail_url='https://m.weibo.cn/detail/'
     aim_url='https://m.weibo.cn/comments/hotflow'
     # mid就是微博内容id
-    mid=4303451069995022  
+    mid=4602369071129283  
     headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
-        'Cookie': None,
+        'Cookie': "_T_WM=29907344257; XSRF-TOKEN=d8fdbe; SUB=_2A25NJWVMDeRhGeNL6FMU9yfNzzuIHXVu5gsErDV6PUJbktANLU_dkW1NSQKv0n_RPkRQ3tBHFjZgBrPHwL5q8oF2; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWbw7wG9yVs_yaEu2Lkh1T65NHD95QfSKepSKM4eKBNWs4Dqcjci--fiK.Ei-24i--fiK.Ei-24i--NiKLWiKnXi--fi-z7iKysi--Ri-isi-zNi--fi-ihiKLs; SSOLoginState=1612780828; WEIBOCN_FROM=1110006030; MLOGIN=1; M_WEIBOCN_PARAMS=oid%3D4602369071129283%26luicode%3D20000061%26lfid%3D4602369071129283%26uicode%3D20000061%26fid%3D4602369071129283",
         'Host': 'm.weibo.cn'
      }
     payload={
