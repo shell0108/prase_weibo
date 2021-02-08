@@ -3,7 +3,7 @@ import random
 import json
 
 def get_proxy_pool():
-    res=res=requests.get('http://lab.crossincode.com/proxy/get/?num=20') 
+    res=requests.get('http://lab.crossincode.com/proxy/get/?num=20') 
     con=res.content
     # 变成字典 全部提取代理ip
     con=json.loads(res.content)

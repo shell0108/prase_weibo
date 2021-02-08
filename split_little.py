@@ -1,18 +1,17 @@
 import json
 
 def split_little(n):
-    with open("fans_idn.json",'r',encoding='utf-8') as jsObj:
+    with open("fans_id.json",'r',encoding='utf-8') as jsObj:
         fans_dict=json.load(jsObj)
         l=len(fans_dict)
         count=1
     fans_dict={}
-    for line in open("fans_idn.json",'r',encoding='utf-8'):  
+    for line in open("fans_id.json",'r',encoding='utf-8'):  
         fans_dict[line[5:15]]=line[19:-4]
         count=count+1
         for i in range(0,n):
             if(count>(i+1)*(l/n)):
                 if(count<((i+1)*(l/n)+1)):
-                    # print(count)
                     json_file="fans_id"+str(i+1)+".json"   
                     fileObj=open(json_file,'w',encoding='utf-8')           
                     jsObj=json.dumps(fans_dict, ensure_ascii = False)
@@ -30,7 +29,7 @@ def split_little(n):
         fileObj2.close() 
 
 
-# split_little(4)
+split_little(4)
                         
 
 
